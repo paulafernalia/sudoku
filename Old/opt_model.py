@@ -55,17 +55,13 @@ def solve_sudoku(constraint_matrix):
 
     # Solve sudoku
     solver = SolverFactory('glpk')
-    status = solver.solve(model)
+    solver.solve(model)
 
     # Save solution to a matrix 9x9
-    if (status.solver.termination_condition == TerminationCondition.optimal) and (status.solver.status == SolverStatus.ok):
-        solution_ = np.empty([9,9], dtype=int)
-        for r in model.dim:
-            for c in model.dim:
-                solution_[r-1,c-1] = sum(value(model.x[r,c,v])*v for v in model.dim)
-    else:
-        solution_ = np.tile('?', (9,9))
+    solution_ = np.empty([9,9], dtype=int)
+    for r in model.dim:
+        for c in model.dim:
+            solution_[r-1,c-1] = sum(value(model.x[r,c,v])*v for v in model.dim)
         
-
     print(solution_)
     return solution_
